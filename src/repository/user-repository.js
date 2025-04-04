@@ -23,6 +23,21 @@ class UserRepository{
             throw {error};
         }
     }
+
+    async getByEmail(emailId){
+        try{
+        const response = await User.findOne(
+            {where:
+               {emailId : emailId}
+            },
+        );
+        console.log("this is upcoming response from repository",response);
+        return response;
+        }catch(error){
+            console.log("SomeThing Went Wrong overhere");
+            throw {error};
+        }
+    }
 }
 
 module.exports = UserRepository;
