@@ -20,10 +20,10 @@ const create = async (req, res) => {
   }
 };
  
-const login = async (req, res) =>{
+const singIn = async (req, res) =>{
   try {
-    console.log(req.body);
-    const token = await userService.generateToken(req.body);
+    const { emailId, password } = req.body;
+    const token = await userService.singIn(emailId, password);
     res.cookie("token", token);
     return res.status(201).json({
       data: token,
@@ -41,7 +41,28 @@ const login = async (req, res) =>{
   }
 }
 
+const isAuthenticated = async (req, res) => {
+  try {
+    const token = req.headers["x-auth-token"]; 
+    const response = await userService.isAuthenticated(token);
+    return res.status(200).json({
+      data: response,
+      message: "User is authenticated successfully",
+      success: true,
+      err: {},
+    });
+  } catch (error) {
+    res.status(500).json({
+      data: {},
+      success: false,
+      message: "Something Wrong in data",
+      err: error,
+    });
+  }
+}
+
 module.exports = {
     create,
-    login
+    singIn,
+    isAuthenticated
 }
